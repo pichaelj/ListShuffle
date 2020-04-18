@@ -1,0 +1,2 @@
+rootProject.name='List.Shuffle'
+include ':app'
