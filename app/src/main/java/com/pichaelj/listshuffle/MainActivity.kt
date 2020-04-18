@@ -2,7 +2,6 @@ package com.pichaelj.listshuffle
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.pichaelj.listshuffle.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.pichaelj.listshuffle.ui.main.MainFragment"
+        android:name="com.pichaelj.listshuffle.ui.lists.ListsFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
+        tools:layout="@layout/list_fragment" />
 </navigation>
