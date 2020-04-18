@@ -4,11 +4,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/lists_fragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/lists_fragment"
         android:name="com.pichaelj.listshuffle.ui.lists.ListsFragment"
-        android:label="main_fragment"
-        tools:layout="@layout/list_fragment" />
+        android:label="lists_fragment"
+        tools:layout="@layout/lists_fragment" >
+
+        <action
+            android:id="@+id/action_lists_fragment_to_items_fragment"
+            app:destination="@id/items_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/items_fragment"
+        android:name="com.pichaelj.listshuffle.ui.items.ItemsFragment"
+        android:label="items_fragment"
+        tools:layout="@layout/items_fragment" >
+
+        <argument
+            android:name="listId"
+            app:argType="long" />
+
+        <action
+            android:id="@+id/action_items_fragment_to_lists_fragment"
+            app:destination="@id/lists_fragment"
+            />
+    </fragment>
 </navigation>

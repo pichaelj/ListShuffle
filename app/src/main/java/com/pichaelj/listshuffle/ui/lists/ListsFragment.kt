@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import com.pichaelj.listshuffle.R
 import com.pichaelj.listshuffle.data.AppDatabase
 import com.pichaelj.listshuffle.data.ShuffleList
-import com.pichaelj.listshuffle.databinding.ListFragmentBinding
-import timber.log.Timber
+import com.pichaelj.listshuffle.databinding.ListsFragmentBinding
 
 class ListsFragment : Fragment(), ShuffleListSelectedListener {
 
@@ -28,7 +28,7 @@ class ListsFragment : Fragment(), ShuffleListSelectedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = ListFragmentBinding.inflate(inflater, container, false)
+        val binding = ListsFragmentBinding.inflate(inflater, container, false)
         binding.listsVm = listsVm
         binding.lifecycleOwner = this
         adapter = ShuffleListsAdapter(this)
@@ -46,8 +46,9 @@ class ListsFragment : Fragment(), ShuffleListSelectedListener {
     }
 
     override fun onListSelected(list: ShuffleList) {
-        Timber.i("onListSelected")
-        Toast.makeText(requireContext(), list.name, Toast.LENGTH_SHORT)
-            .show()
+        view?.let {
+            it.findNavController().navigate(
+                ListsFragmentDirections.actionListsFragmentToItemsFragment(list.id))
+        }
     }
 }

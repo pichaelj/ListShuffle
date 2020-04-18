@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#d63447</color>
+    <color name="colorPrimaryDark">#b61427</color>
 
-    <color name="grey_bg">#eeeeee</color>
+    <color name="colorBackground">#f6eedf</color>
+    <color name="colorBackgroundSecondary">#d1cebd</color>
+
+    <color name="colorAccent">#f57b51</color>
+
+    <color name="grey">#EEEEEE</color>
+
+    <color name="lists_bg">@color/colorBackgroundSecondary</color>
 </resources>

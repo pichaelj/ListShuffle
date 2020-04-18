@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pichaelj.listshuffle.data.ShuffleList
-import com.pichaelj.listshuffle.databinding.ListItemBinding
+import com.pichaelj.listshuffle.databinding.ShuffleListRvItemBinding
 
 interface ShuffleListSelectedListener {
     fun onListSelected(list: ShuffleList)
@@ -24,13 +24,13 @@ class ShuffleListsAdapter(
         ViewHolder.from(parent, listSelectedListener)
 
     class ViewHolder private constructor(
-        private val binding: ListItemBinding,
+        private val binding: ShuffleListRvItemBinding,
         private val listSelectedListener: ShuffleListSelectedListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         companion object {
             fun from(parent: ViewGroup, listSelectedListener: ShuffleListSelectedListener): ViewHolder {
-                val binding = ListItemBinding.inflate(
+                val binding = ShuffleListRvItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false

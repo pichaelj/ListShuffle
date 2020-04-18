@@ -9,7 +9,7 @@
     </data>
 
     <FrameLayout
-        android:background="@color/grey_bg"
+        android:background="@color/lists_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,6 +17,8 @@
             android:id="@+id/list_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="@dimen/margin_quarter"
+            android:clipToPadding="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </FrameLayout>
