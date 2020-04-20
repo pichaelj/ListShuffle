@@ -2,8 +2,12 @@ package com.pichaelj.listshuffle.ui.lists
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,6 +32,8 @@ class ListsFragment : Fragment(), ShuffleListSelectedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
+
         val binding = ListsFragmentBinding.inflate(inflater, container, false)
         binding.listsVm = listsVm
         binding.lifecycleOwner = this
@@ -43,6 +49,24 @@ class ListsFragment : Fragment(), ShuffleListSelectedListener {
         }
 
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.shuffle_lists_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_list_add -> launchNewItemDialog()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun launchNewItemDialog() {
+        Toast.makeText(context, "Added new list", Toast.LENGTH_SHORT).show()
+        listsVm.insertDummyList()
     }
 
     override fun onListSelected(list: ShuffleList) {

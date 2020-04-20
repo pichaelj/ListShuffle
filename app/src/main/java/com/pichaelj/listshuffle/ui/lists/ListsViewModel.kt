@@ -56,10 +56,10 @@ class ListsViewModel(
 
     // region List Insertion
 
-    fun insertDummyData(){
-        for (i in (0..30)){
-            insertList(ShuffleList("List $i"))
-        }
+    private var listI = 0
+
+    fun insertDummyList() {
+        insertList(ShuffleList("Dummy List ${listI++}"))
     }
 
     private fun insertList(newList: ShuffleList){

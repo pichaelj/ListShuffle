@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">List.Shuffle</string>
+    
+    <string name="new_list">New List</string>
 </resources>
