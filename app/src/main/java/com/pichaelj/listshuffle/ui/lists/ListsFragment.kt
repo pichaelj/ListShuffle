@@ -22,6 +22,7 @@ import com.pichaelj.listshuffle.databinding.ListsFragmentBinding
 import com.pichaelj.listshuffle.ui.lists.views.AddListListener
 import com.pichaelj.listshuffle.ui.lists.views.ExistingListSelectedListener
 import com.pichaelj.listshuffle.ui.utils.hideKeyboard
+import com.pichaelj.listshuffle.ui.utils.showSnackbarMessage
 
 class ListsFragment : Fragment(), AddListListener, ExistingListSelectedListener {
 
@@ -113,11 +114,7 @@ class ListsFragment : Fragment(), AddListListener, ExistingListSelectedListener 
     }
 
     override fun onEmptyListName() {
-        Snackbar.make(
-            binding.root,
-            "Error: List name cannot be empty",
-            Snackbar.LENGTH_SHORT
-        ).show()
+        showSnackbarMessage(binding.root, "Error: List name cannot be empty")
     }
 
     // region ExistingListSelectedListener
