@@ -1,46 +1,36 @@
 package com.pichaelj.listshuffle.ui.items
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.pichaelj.listshuffle.data.ShuffleItem
-import com.pichaelj.listshuffle.databinding.ShuffleItemRvItemBinding
+import com.pichaelj.listshuffle.ui.items.views.*
+import java.lang.IllegalArgumentException
 
-class ShuffleItemsAdapter : ListAdapter<ShuffleItem, ShuffleItemsAdapter.ViewHolder>(
-    ShuffleItemDiffCallback()
-) {
+class ShuffleItemsAdapter(
+    private val addItemListener: AddItemListener
+) : ListAdapter<ShuffleItemDataItem, RecyclerView.ViewHolder>(ShuffleItemDiffCallback()) {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun submitList(list: List<ShuffleItemDataItem>?){
+        super.submitList(list?.let { ArrayList(it) })
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder.from(parent)
-
-    // region ViewHolder
-
-    class ViewHolder private constructor(
-        private val binding: ShuffleItemRvItemBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        companion object {
-            fun from(parent: ViewGroup): ViewHolder {
-                val binding = ShuffleItemRvItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-
-                return ViewHolder(binding)
-            }
-        }
-
-        fun bind(item: ShuffleItem) {
-            binding.itemLabelTv.text = item.label
+        when (holder) {
+            is AddItemViewHolder -> holder.bind(AddItemViewModel(addItemListener, item.item))
+            is ExistingItemViewHolder -> holder.bind(ExistingItemViewModel(item.item))
+            else -> throw IllegalArgumentException("Unknown ViewHolder class")
         }
     }
 
-    // endregion
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
+            ShuffleItemDataItem.VIEW_TYPE_ADD_ITEM -> AddItemViewHolder.from(parent)
+            ShuffleItemDataItem.VIEW_TYPE_EXISTING_ITEM -> ExistingItemViewHolder.from(parent)
+            else -> throw IllegalArgumentException("Unknown viewType $viewType")
+        }
+
+    override fun getItemViewType(position: Int): Int =
+        getItem(position).viewType
 }

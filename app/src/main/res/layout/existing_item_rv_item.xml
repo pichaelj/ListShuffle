@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="existingItemVm"
+            type="com.pichaelj.listshuffle.ui.items.views.ExistingItemViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/list_it_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_quarter"
+        app:cardCornerRadius="@dimen/margin_half"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/list_item_enabled">
+
+        <TextView
+            style="@style/ListItemStyle"
+            android:id="@+id/list_item_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_full"
+            android:text="@{existingItemVm.itemName}" />
+    </androidx.cardview.widget.CardView>
+</layout>

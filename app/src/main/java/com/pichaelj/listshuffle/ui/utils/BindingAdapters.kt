@@ -1,4 +1,4 @@
-package com.pichaelj.listshuffle.ui.lists
+package com.pichaelj.listshuffle.ui.utils
 
 import android.view.KeyEvent
 import android.view.View
