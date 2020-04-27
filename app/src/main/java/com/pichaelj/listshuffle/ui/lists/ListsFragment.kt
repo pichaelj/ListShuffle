@@ -21,6 +21,7 @@ import com.pichaelj.listshuffle.data.ShuffleList
 import com.pichaelj.listshuffle.databinding.ListsFragmentBinding
 import com.pichaelj.listshuffle.ui.lists.views.AddListListener
 import com.pichaelj.listshuffle.ui.lists.views.ExistingListSelectedListener
+import com.pichaelj.listshuffle.ui.utils.hideKeyboard
 
 class ListsFragment : Fragment(), AddListListener, ExistingListSelectedListener {
 
@@ -44,6 +45,7 @@ class ListsFragment : Fragment(), AddListListener, ExistingListSelectedListener 
         binding = ListsFragmentBinding.inflate(inflater, container, false)
         binding.listsVm = listsVm
         binding.lifecycleOwner = viewLifecycleOwner
+
         adapter = ShuffleListsAdapter(this, this)
         binding.listRv.adapter = adapter
 
@@ -107,13 +109,7 @@ class ListsFragment : Fragment(), AddListListener, ExistingListSelectedListener 
     override fun onAddList(list: ShuffleList) {
         listsVm.addList(list)
 
-        // Hide keyboard
-        //
-        val view = activity?.currentFocus
-        view?.let { v ->
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.hideSoftInputFromWindow(v.windowToken, 0)
-        }
+        hideKeyboard()
     }
 
     override fun onEmptyListName() {
