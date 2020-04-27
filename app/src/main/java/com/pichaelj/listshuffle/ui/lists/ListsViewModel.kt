@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.pichaelj.listshuffle.data.ShuffleList
 import com.pichaelj.listshuffle.data.ShuffleListDao
-import com.pichaelj.listshuffle.ui.lists.views.AddListListener
 import com.pichaelj.listshuffle.ui.lists.views.ShuffleListDataItem
 import com.pichaelj.listshuffle.ui.utils.CombinedLiveData
 import kotlinx.coroutines.*
@@ -46,11 +45,7 @@ class ListsViewModel(
      */
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    init {
-        Timber.d("init")
-    }
-
-    // region Create New List
+    // region Add List
 
     private var _isAddingList = MutableLiveData<Boolean>(false)
 
@@ -67,6 +62,10 @@ class ListsViewModel(
         setAddingListChangedEvent()
     }
 
+    // endregion
+
+    // region Adding List Changed Event
+
     private var _addingListChangedEvent = MutableLiveData<Boolean>(false)
 
     private fun setAddingListChangedEvent() {
@@ -80,16 +79,24 @@ class ListsViewModel(
         _addingListChangedEvent.value = false
     }
 
+    // endregion
+
+    // region Existing Lists
+
     private var _lists: LiveData<List<ShuffleList>> = listsDao.getLists()
 
-    private val _listVms: LiveData<MutableList<ShuffleListDataItem>>
+    private val _existingLists: LiveData<MutableList<ShuffleListDataItem>>
         get() = Transformations.map(_lists) { lists ->
             lists.map { ShuffleListDataItem.newExisting(it) }.toMutableList()
         }
 
+    // endregion
+
+    // region Joining Add + Existing List Data Items
+
     val listDataItems = CombinedLiveData<Boolean, MutableList<ShuffleListDataItem>, List<ShuffleListDataItem>>(
         _isAddingList,
-        _listVms,
+        _existingLists,
         this::handleAddingItem
     )
 
@@ -105,8 +112,10 @@ class ListsViewModel(
             return listVms
         }
 
+        // Check and see if the existing lists already contains the "Add Data Item"
         val listContainsAddView = if (listVms.size > 0) listVms[0].isAddingView else false
 
+        // Add/remove the "Add Data Item" if needed
         if (isAddingList && !listContainsAddView) {
             listVms.add(0,
                 ShuffleListDataItem.newAdding()
@@ -118,6 +127,10 @@ class ListsViewModel(
         return listVms
     }
 
+    // endregion
+
+    // region List Creation
+
     fun addList(list: ShuffleList){
         insertList(list)
         hideAddListView()
@@ -127,9 +140,27 @@ class ListsViewModel(
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 listsDao.insert(newList)
+                postListCreatedEvent(newList.name)
             }
         }
     }
+
+    // region List Created Event
+
+    private var _listCreatedEvent = MutableLiveData<String>()
+
+    val listCreatedEvent: LiveData<String>
+        get() = _listCreatedEvent
+
+    private fun postListCreatedEvent(listName: String) {
+        _listCreatedEvent.postValue(listName)
+    }
+
+    fun listCreatedEventHandled() {
+        _listCreatedEvent.value = null
+    }
+
+    // endregion
 
     // endregion
 }
