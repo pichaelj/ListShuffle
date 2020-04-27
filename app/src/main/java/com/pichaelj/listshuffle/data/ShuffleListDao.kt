@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface ShuffleListDao {
 
-    @Query("SELECT * FROM shuffle_list_table ORDER BY name")
+    @Query("SELECT * FROM shuffle_list_table ORDER BY name COLLATE NOCASE")
     fun getLists(): LiveData<List<ShuffleList>>
 
     @Insert

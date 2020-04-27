@@ -1,14 +1,12 @@
 package com.pichaelj.listshuffle.ui.lists
 
 import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.pichaelj.listshuffle.data.AppDatabase
+import androidx.lifecycle.*
 import com.pichaelj.listshuffle.data.ShuffleList
 import com.pichaelj.listshuffle.data.ShuffleListDao
+import com.pichaelj.listshuffle.ui.lists.views.AddListListener
+import com.pichaelj.listshuffle.ui.lists.views.ShuffleListDataItem
+import com.pichaelj.listshuffle.ui.utils.CombinedLiveData
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -17,7 +15,7 @@ class ListsViewModelFactory(
     private val listDao: ShuffleListDao
 ) : ViewModelProvider.Factory {
 
-    @SuppressWarnings("unchecked_cast")
+    @SuppressWarnings("Unchecked cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ListsViewModel::class.java)) {
             return ListsViewModel(application, listDao) as T
@@ -52,14 +50,77 @@ class ListsViewModel(
         Timber.d("init")
     }
 
-    val allLists: LiveData<List<ShuffleList>> = listsDao.getLists()
+    // region Create New List
 
-    // region List Insertion
+    private var _isAddingList = MutableLiveData<Boolean>(false)
 
-    private var listI = 0
+    val isAddingList: Boolean
+        get() = _isAddingList.value!!
 
-    fun insertDummyList() {
-        insertList(ShuffleList("Dummy List ${listI++}"))
+    fun showAddListView() {
+        _isAddingList.value = true
+        setAddingListChangedEvent()
+    }
+
+    fun hideAddListView() {
+        _isAddingList.value = false
+        setAddingListChangedEvent()
+    }
+
+    private var _addingListChangedEvent = MutableLiveData<Boolean>(false)
+
+    private fun setAddingListChangedEvent() {
+        _addingListChangedEvent.value = true
+    }
+
+    val addingListChangedEvent: LiveData<Boolean>
+        get() = _addingListChangedEvent
+
+    fun addingListChangedEventHandled() {
+        _addingListChangedEvent.value = false
+    }
+
+    private var _lists: LiveData<List<ShuffleList>> = listsDao.getLists()
+
+    private val _listVms: LiveData<MutableList<ShuffleListDataItem>>
+        get() = Transformations.map(_lists) { lists ->
+            lists.map { ShuffleListDataItem.newExisting(it) }.toMutableList()
+        }
+
+    val listDataItems = CombinedLiveData<Boolean, MutableList<ShuffleListDataItem>, List<ShuffleListDataItem>>(
+        _isAddingList,
+        _listVms,
+        this::handleAddingItem
+    )
+
+    private fun handleAddingItem(
+        isAddingList: Boolean?,
+        listVms: MutableList<ShuffleListDataItem>?
+    ) : List<ShuffleListDataItem> {
+        if (listVms == null) {
+            return listOf()
+        }
+
+        if (isAddingList == null) {
+            return listVms
+        }
+
+        val listContainsAddView = if (listVms.size > 0) listVms[0].isAddingView else false
+
+        if (isAddingList && !listContainsAddView) {
+            listVms.add(0,
+                ShuffleListDataItem.newAdding()
+            )
+        } else if (!isAddingList && listContainsAddView) {
+            listVms.removeAt(0)
+        }
+
+        return listVms
+    }
+
+    fun addList(list: ShuffleList){
+        insertList(list)
+        hideAddListView()
     }
 
     private fun insertList(newList: ShuffleList){
@@ -71,6 +132,4 @@ class ListsViewModel(
     }
 
     // endregion
-
-
 }

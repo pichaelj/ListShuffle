@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ListItemStyle">
+        <item name="android:textSize">@dimen/list_item_text_size</item>
+    </style>
+
 </resources>

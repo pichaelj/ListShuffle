@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="addListVm"
+            type="com.pichaelj.listshuffle.ui.lists.views.AddListViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/list_it_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_quarter"
+        app:cardCornerRadius="@dimen/margin_half"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/list_item_enabled">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list_item_add_cl"
+            android:layout_width="match_parent"
+            android:padding="@dimen/margin_half"
+            android:layout_height="wrap_content">
+
+            <EditText
+                style="@style/ListItemStyle"
+                android:id="@+id/list_item_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_half"
+                android:hint="@string/list_label_hint"
+                android:inputType="text"
+                android:lines="1"
+                android:imeOptions="actionDone"
+                android:text="@={addListVm.list.name}"
+                app:onOkayInSoftKeyboard="@{() -> addListVm.onDoneButtonClicked()}"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/list_item_done_ib" />
+
+            <ImageButton
+                android:id="@+id/list_item_done_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_half"
+                android:src="@drawable/ic_check"
+                android:backgroundTint="@color/colorAccent"
+                android:onClick="@{() -> addListVm.onDoneButtonClicked()}"
+
+                app:layout_constraintStart_toEndOf="@+id/list_item_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

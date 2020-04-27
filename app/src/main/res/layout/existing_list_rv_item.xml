@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="existingListVm"
+            type="com.pichaelj.listshuffle.ui.lists.views.ExistingListViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -10,19 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_quarter"
-        android:clickable="true"
         app:cardCornerRadius="@dimen/margin_half"
-        app:cardElevation="1dp">
-
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/list_item_enabled">
         <TextView
+            style="@style/ListItemStyle"
             android:id="@+id/list_item_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_full"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
+            android:padding="@dimen/margin_full"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> existingListVm.onListClicked()}"
+            android:text="@{existingListVm.listName}" />
     </androidx.cardview.widget.CardView>
 </layout>

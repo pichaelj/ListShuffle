@@ -10,4 +10,12 @@
         android:enabled="true"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/menu_list_cancel"
+        android:icon="@drawable/ic_close"
+        android:title="@string/cancel"
+        android:visible="false"
+        android:enabled="false"
+        app:showAsAction="ifRoom" />
+
 </menu>

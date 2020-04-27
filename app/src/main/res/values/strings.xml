@@ -2,4 +2,7 @@
     <string name="app_name">List.Shuffle</string>
     
     <string name="new_list">New List</string>
+
+    <string name="list_label_hint">Name of new list</string>
+    <string name="cancel">Cancel</string>
 </resources>

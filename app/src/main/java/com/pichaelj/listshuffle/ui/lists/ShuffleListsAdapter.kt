@@ -1,51 +1,38 @@
 package com.pichaelj.listshuffle.ui.lists
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.pichaelj.listshuffle.data.ShuffleList
-import com.pichaelj.listshuffle.databinding.ShuffleListRvItemBinding
-
-interface ShuffleListSelectedListener {
-    fun onListSelected(list: ShuffleList)
-}
+import com.pichaelj.listshuffle.ui.lists.views.*
+import java.lang.IllegalArgumentException
 
 class ShuffleListsAdapter(
-    private val listSelectedListener: ShuffleListSelectedListener
-) : ListAdapter<ShuffleList, ShuffleListsAdapter.ViewHolder>(ShuffleListDiffCallback()) {
+    private val addListListener: AddListListener,
+    private val listSelectedListener: ExistingListSelectedListener
+) : ListAdapter<ShuffleListDataItem, RecyclerView.ViewHolder>(ShuffleListDiffCallback()) {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val list = getItem(position)
-        holder.bind(list)
+    override fun submitList(list: List<ShuffleListDataItem>?) {
+        super.submitList(list?.let { ArrayList(it) })
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder.from(parent, listSelectedListener)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val listItem = getItem(position)
 
-    class ViewHolder private constructor(
-        private val binding: ShuffleListRvItemBinding,
-        private val listSelectedListener: ShuffleListSelectedListener
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        companion object {
-            fun from(parent: ViewGroup, listSelectedListener: ShuffleListSelectedListener): ViewHolder {
-                val binding = ShuffleListRvItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-
-                return ViewHolder(binding, listSelectedListener)
-            }
-        }
-
-        fun bind(list: ShuffleList) {
-            binding.listItemTv.text = list.name
-
-            binding.listItCv.setOnClickListener {
-                listSelectedListener.onListSelected(list)
-            }
+        when (holder) {
+            is AddListViewHolder -> holder.bind(AddListViewModel(addListListener, listItem.list))
+            is ExistingListViewHolder -> holder.bind(ExistingListViewModel(listSelectedListener, listItem.list))
+            else -> throw IllegalArgumentException("Unknown ViewHolder class")
         }
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            ShuffleListDataItem.VIEW_TYPE_ADD_LIST -> AddListViewHolder.from(parent)
+            ShuffleListDataItem.VIEW_TYPE_EXISTING_LIST -> ExistingListViewHolder.from(parent)
+            else -> throw IllegalArgumentException("Unknown viewType $viewType")
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int =
+        getItem(position).viewType
 }

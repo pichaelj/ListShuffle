@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/lists_fragment"
         android:name="com.pichaelj.listshuffle.ui.lists.ListsFragment"
-        android:label="lists_fragment"
+        android:label="My Lists"
         tools:layout="@layout/lists_fragment" >
 
         <action
@@ -24,12 +24,16 @@
     <fragment
         android:id="@+id/items_fragment"
         android:name="com.pichaelj.listshuffle.ui.items.ItemsFragment"
-        android:label="items_fragment"
+        android:label="{listName}"
         tools:layout="@layout/items_fragment" >
 
         <argument
             android:name="listId"
             app:argType="long" />
+
+        <argument
+            android:name="listName"
+            app:argType="string" />
 
         <action
             android:id="@+id/action_items_fragment_to_lists_fragment"

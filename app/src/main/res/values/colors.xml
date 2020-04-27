@@ -3,12 +3,20 @@
     <color name="colorPrimary">#d63447</color>
     <color name="colorPrimaryDark">#b61427</color>
 
-    <color name="colorBackground">#f6eedf</color>
-    <color name="colorBackgroundSecondary">#d1cebd</color>
+    <color name="bgLight">#fff6f0</color>
+    <color name="bgMedium">#f6eedf</color>
+    <color name="bgDark">#d1cebd</color>
 
     <color name="colorAccent">#f57b51</color>
 
+    <color name="rojo">#fc5c65</color>
+    <color name="verde">#36fe91</color>
+    <color name="azul">#55baf2</color>
+    <color name="amarillo">#ffe340</color>
+
     <color name="grey">#EEEEEE</color>
 
-    <color name="lists_bg">@color/colorBackgroundSecondary</color>
+    <color name="list_item_enabled">@color/bgLight</color>
+    <color name="list_item_disabled">@color/bgMedium</color>
+    <color name="lists_bg">@color/bgDark</color>
 </resources>
