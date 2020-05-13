@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(
     tableName = "shuffle_list_item_table",
@@ -21,7 +22,7 @@ data class ShuffleItem(
 
     @ColumnInfo(name = "label")
     var label: String
-) {
+): Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id: Long = 0L

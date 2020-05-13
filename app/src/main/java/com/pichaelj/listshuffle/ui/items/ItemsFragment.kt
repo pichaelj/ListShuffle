@@ -6,16 +6,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.pichaelj.listshuffle.R
 import com.pichaelj.listshuffle.data.AppDatabase
 import com.pichaelj.listshuffle.data.ShuffleItem
 import com.pichaelj.listshuffle.databinding.ItemsFragmentBinding
 import com.pichaelj.listshuffle.ui.items.views.AddItemListener
+import com.pichaelj.listshuffle.ui.items.views.ModifyItemListener
+import com.pichaelj.listshuffle.ui.items.options.ItemOptionsBottomSheet
+import com.pichaelj.listshuffle.ui.items.options.ItemOptionsListener
 import com.pichaelj.listshuffle.ui.utils.hideKeyboard
 import com.pichaelj.listshuffle.ui.utils.showSnackbarMessage
 
-class ItemsFragment : Fragment(), AddItemListener {
+class ItemsFragment : Fragment(), AddItemListener, ModifyItemListener, ItemOptionsListener {
 
     private val itemsVm: ItemsViewModel by viewModels() {
         ItemsViewModelFactory(
@@ -40,7 +42,7 @@ class ItemsFragment : Fragment(), AddItemListener {
         binding.itemsVm = itemsVm
         binding.lifecycleOwner = viewLifecycleOwner
 
-        adapter = ShuffleItemsAdapter(this)
+        adapter = ShuffleItemsAdapter(this, this, this)
         binding.itemsRv.adapter = adapter
 
         binding.itemsVm?.apply {
@@ -49,8 +51,9 @@ class ItemsFragment : Fragment(), AddItemListener {
             })
         }
 
-        initMenuChangedListeners()
-        initItemAddedListener()
+        initMenuChangedObserver()
+        initItemAddedObserver()
+        initItemDeletedObserver()
 
         val listId = ItemsFragmentArgs.fromBundle(requireArguments()).listId
         Toast.makeText(requireContext(), listId.toString(), Toast.LENGTH_SHORT).show()
@@ -60,7 +63,7 @@ class ItemsFragment : Fragment(), AddItemListener {
 
     // region Menu
 
-    private fun initMenuChangedListeners() {
+    private fun initMenuChangedObserver() {
         itemsVm.addingItemChangedEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
                 activity?.invalidateOptionsMenu()
@@ -93,14 +96,23 @@ class ItemsFragment : Fragment(), AddItemListener {
         return super.onOptionsItemSelected(item)
     }
 
-    // endregion
-
     private fun showAddItemView() {
         itemsVm.showAddItemView()
         binding.itemsRv.smoothScrollToPosition(0)
     }
 
-    // region AddItemListener
+    // endregion
+
+    // region ItemViewModel Event Listeners
+
+    private fun initItemAddedObserver() {
+        itemsVm.itemAddedEvent.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                showSnackbarMessage(binding.root, "Added '$it' to list")
+                itemsVm.itemAddedEventHandled()
+            }
+        })
+    }
 
     override fun onAddItem(item: ShuffleItem) {
         itemsVm.addItem(item)
@@ -112,15 +124,35 @@ class ItemsFragment : Fragment(), AddItemListener {
         showSnackbarMessage(binding.root, "Error: Item name cannot be empty")
     }
 
-    // endregion
-
-    private fun initItemAddedListener() {
-        itemsVm.itemAddedEvent.observe(viewLifecycleOwner, Observer {
+    private fun initItemDeletedObserver() {
+        itemsVm.itemDeletedEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                showSnackbarMessage(binding.root, "Added '$it' to list")
-                itemsVm.itemAddedEventHandled()
+                showSnackbarMessage(binding.root, "Deleted '$it'")
             }
         })
+    }
+
+    // endregion
+
+    // region Edit Item Listeners
+
+    override fun onMondifyItem(item: ShuffleItem) {
+        // Show requested item in an options bottom sheet
+        //
+        var fm = parentFragmentManager
+        if (fm != null) {
+            var bottomSheet = ItemOptionsBottomSheet.newInstance(item)
+            bottomSheet.setTargetFragment(this, 0)
+            bottomSheet.show(fm, "ModalBottomSheet")
+        }
+    }
+
+    // endregion
+
+    // region ItemOptionsListener implementation
+
+    override fun onDelete(item: ShuffleItem) {
+        itemsVm.deleteItem(item)
     }
 
     // endregion

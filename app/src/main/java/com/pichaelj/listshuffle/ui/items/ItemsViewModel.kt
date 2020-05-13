@@ -1,6 +1,7 @@
 package com.pichaelj.listshuffle.ui.items
 
 import android.app.Application
+import android.view.View
 import androidx.lifecycle.*
 import com.pichaelj.listshuffle.data.ShuffleItem
 import com.pichaelj.listshuffle.data.ShuffleItemDao
@@ -123,11 +124,11 @@ class ItemsViewModel(
     // region Item Creation
 
     fun addItem(item: ShuffleItem) {
-        insertItem(item)
+        insertItemAsync(item)
         hideAddItemView()
     }
 
-    private fun insertItem(newItem: ShuffleItem) {
+    private fun insertItemAsync(newItem: ShuffleItem) {
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 itemsDao.insert(newItem)
@@ -149,6 +150,40 @@ class ItemsViewModel(
 
     fun itemAddedEventHandled() {
         _itemAddedEvent.value = null
+    }
+
+    // endregion
+
+    // endregion
+
+    // region Item Deletion
+
+    fun deleteItem(item: ShuffleItem) {
+        deleteItemAsync(item)
+    }
+
+    private fun deleteItemAsync(item: ShuffleItem) {
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                itemsDao.delete(item)
+                postItemDeletedEvent(item.label)
+            }
+        }
+    }
+
+    // region Item Deleted Event
+
+    private var _itemDeletedEvent = MutableLiveData<String>()
+
+    val itemDeletedEvent: LiveData<String>
+        get() = _itemDeletedEvent
+
+    private fun postItemDeletedEvent(itemName: String) {
+        _itemDeletedEvent.postValue(itemName)
+    }
+
+    fun itemDeletedEventHandled() {
+        _itemDeletedEvent.value = null
     }
 
     // endregion

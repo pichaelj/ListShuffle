@@ -5,4 +5,6 @@
 
     <string name="list_label_hint">Name of new list</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

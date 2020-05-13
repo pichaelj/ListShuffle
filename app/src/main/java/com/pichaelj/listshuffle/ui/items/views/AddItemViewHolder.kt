@@ -2,6 +2,7 @@ package com.pichaelj.listshuffle.ui.items.views
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.pichaelj.listshuffle.databinding.AddItemRvItemBinding
 
@@ -21,7 +22,8 @@ class AddItemViewHolder private constructor(
         }
     }
 
-    fun bind(addItemVm: AddItemViewModel) {
+    fun bind(addItemVm: AddItemViewModel, lifecycleOwner: LifecycleOwner) {
         binding.addItemVm = addItemVm
+        binding.lifecycleOwner = lifecycleOwner
     }
 }

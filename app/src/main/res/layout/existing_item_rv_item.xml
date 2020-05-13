@@ -13,16 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_quarter"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+
+        app:cardBackgroundColor="@color/list_item_enabled"
         app:cardCornerRadius="@dimen/margin_half"
-        app:cardElevation="1dp"
-        app:cardBackgroundColor="@color/list_item_enabled">
+        app:cardElevation="1dp">
 
         <TextView
-            style="@style/ListItemStyle"
             android:id="@+id/list_item_tv"
+            style="@style/ListItemStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_full"
+            android:layout_margin="@dimen/margin_full"
             android:text="@{existingItemVm.itemName}" />
     </androidx.cardview.widget.CardView>
 </layout>

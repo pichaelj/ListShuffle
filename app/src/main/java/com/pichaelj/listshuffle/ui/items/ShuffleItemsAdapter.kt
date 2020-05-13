@@ -1,13 +1,16 @@
 package com.pichaelj.listshuffle.ui.items
 
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pichaelj.listshuffle.ui.items.views.*
 import java.lang.IllegalArgumentException
 
 class ShuffleItemsAdapter(
-    private val addItemListener: AddItemListener
+    private val addItemListener: AddItemListener,
+    private val editItemListener: ModifyItemListener,
+    private val lifecycleOwner: LifecycleOwner
 ) : ListAdapter<ShuffleItemDataItem, RecyclerView.ViewHolder>(ShuffleItemDiffCallback()) {
 
     override fun submitList(list: List<ShuffleItemDataItem>?){
@@ -18,8 +21,8 @@ class ShuffleItemsAdapter(
         val item = getItem(position)
 
         when (holder) {
-            is AddItemViewHolder -> holder.bind(AddItemViewModel(addItemListener, item.item))
-            is ExistingItemViewHolder -> holder.bind(ExistingItemViewModel(item.item))
+            is AddItemViewHolder -> holder.bind(AddItemViewModel(addItemListener, item.item), lifecycleOwner)
+            is ExistingItemViewHolder -> holder.bind(ExistingItemViewModel(editItemListener, item.item))
             else -> throw IllegalArgumentException("Unknown ViewHolder class")
         }
     }

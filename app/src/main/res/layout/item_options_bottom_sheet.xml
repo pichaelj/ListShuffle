@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/items_edit_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:cardBackgroundColor="@color/list_item_enabled"
+        app:cardCornerRadius="@dimen/margin_half"
+        app:cardElevation="1dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_half"
+            android:orientation="vertical" >
+
+            <TextView
+                style="@style/BottomSheetItemTitle"
+                android:layout_margin="@dimen/margin_half"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_options_label_tv" />
+
+            <Button
+                android:id="@+id/list_item_rm_ib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_half"
+                android:backgroundTint="@color/rojo"
+                android:text="@string/delete"
+                android:drawableEnd="@drawable/ic_delete"
+                android:drawableRight="@drawable/ic_delete" />
+
+            <Button
+                android:id="@+id/list_item_cancel_ib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_half"
+                android:text="@string/cancel"
+                android:drawableEnd="@drawable/ic_close"
+                android:drawableRight="@drawable/ic_close" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

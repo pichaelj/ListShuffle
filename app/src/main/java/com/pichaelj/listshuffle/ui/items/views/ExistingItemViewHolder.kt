@@ -23,5 +23,6 @@ class ExistingItemViewHolder private constructor(
 
     fun bind(itemVm: ExistingItemViewModel) {
         binding.existingItemVm = itemVm
+        binding.root.setOnClickListener(itemVm)
     }
 }
